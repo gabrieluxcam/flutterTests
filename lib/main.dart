@@ -6,6 +6,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 
+// UXCAM
+import 'package:flutter_uxcam/flutter_uxcam.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -34,6 +37,11 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    FlutterUxcam.optIntoSchematicRecordings();
+    FlutterUxConfig config = FlutterUxConfig(
+        userAppKey: "djazkur7hg5icjx", enableAutomaticScreenNameTagging: false);
+    FlutterUxcam.startWithConfiguration(config);
+
     return MaterialApp(
       title: 'Flutter Firebase Demo',
       theme: ThemeData(
