@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'webview_page.dart'; // Import the WebViewPage
 
 // Firebase
 import 'package:firebase_core/firebase_core.dart';
@@ -95,6 +96,17 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  void _openWebView() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const WebViewPage(
+          url: 'https://developer.uxcam.com/', // Replace with your URL
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -119,6 +131,11 @@ class _MyHomePageState extends State<MyHomePage> {
             ElevatedButton(
               onPressed: _sendTestEvent2,
               child: const Text('Send Test Event 2'),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: _openWebView,
+              child: const Text('Open In-App WebView'),
             ),
           ],
         ),
