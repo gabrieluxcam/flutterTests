@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:gtm_test_app/service_locator.dart';
 import 'webview_page.dart'; // Import the WebViewPage
 
 // Firebase
@@ -9,11 +11,15 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 // UXCAM
 import 'package:flutter_uxcam/flutter_uxcam.dart';
 
+// Custom browser
+import 'custom_browser.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  setupServiceLocator();
   runApp(const MyApp());
 }
 
@@ -39,7 +45,9 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     FlutterUxcam.optIntoSchematicRecordings();
     FlutterUxConfig config = FlutterUxConfig(
-        userAppKey: "djazkur7hg5icjx", enableAutomaticScreenNameTagging: false);
+      userAppKey: "djazkur7hg5icjx",
+      enableAutomaticScreenNameTagging: false,
+    );
     FlutterUxcam.startWithConfiguration(config);
 
     return MaterialApp(
@@ -76,6 +84,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  final AuthBrowser _browser = AuthBrowser();
 
   // Function to send events to Firebase Analytics
   Future<void> _sendTestEvent1() async {
@@ -104,11 +113,17 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  void _openInAppBrowser() async {
+    await _browser.open(
+      url: WebUri('https://developer.uxcam.com/'),
+    );
+  }
+
   void _openWebView() {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const WebViewPage(
+        builder: (context) => WebViewPage(
           url: 'https://developer.uxcam.com/', // Replace with your URL
         ),
       ),
@@ -141,6 +156,10 @@ class _MyHomePageState extends State<MyHomePage> {
               child: const Text('Send Test Event 2'),
             ),
             const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: _openInAppBrowser,
+              child: const Text('Open in Custom Tab Browser'),
+            ),
             ElevatedButton(
               onPressed: _openWebView,
               child: const Text('Open In-App WebView'),
