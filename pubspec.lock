@@ -101,18 +101,18 @@ packages:
     dependency: transitive
     description:
       name: firebase_core_platform_interface
-      sha256: e30da58198a6d4b49d5bce4e852f985c32cb10db329ebef9473db2b9f09ce810
+      sha256: d7253d255ff10f85cfd2adaba9ac17bae878fa3ba577462451163bd9f1d1f0bf
       url: "https://pub.dev"
     source: hosted
-    version: "5.3.0"
+    version: "5.4.0"
   firebase_core_web:
     dependency: transitive
     description:
       name: firebase_core_web
-      sha256: f967a7138f5d2ffb1ce15950e2a382924239eaa521150a8f144af34e68b3b3e5
+      sha256: fbc008cf390d909b823763064b63afefe9f02d8afdb13eb3f485b871afee956b
       url: "https://pub.dev"
     source: hosted
-    version: "2.18.1"
+    version: "2.19.0"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -138,10 +138,10 @@ packages:
     dependency: transitive
     description:
       name: flutter_inappwebview_internal_annotations
-      sha256: "5f80fd30e208ddded7dbbcd0d569e7995f9f63d45ea3f548d8dd4c0b473fb4c8"
+      sha256: "787171d43f8af67864740b6f04166c13190aa74a1468a1f1f1e9ee5b90c359cd"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.1"
+    version: "1.2.0"
   flutter_inappwebview_ios:
     dependency: transitive
     description:
@@ -199,10 +199,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_uxcam
-      sha256: fa10b5e57efca92aa8608351c2de6817f0887065aa5d83d72624f3f66bb1f0ac
+      sha256: b59986a14a62a31c3644fdcb57496d05d216422c5894cd12a13a0b63ec4a0ac8
       url: "https://pub.dev"
     source: hosted
-    version: "2.5.5"
+    version: "2.5.7"
   flutter_web_plugins:
     dependency: transitive
     description: flutter

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'inappwebviewscreen.dart';
 import 'custom_browser.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
@@ -28,6 +29,7 @@ class WebViewPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FlutterUxcam.tagScreenName('Webview');
     return Scaffold(
       appBar: AppBar(
         title: const Text("Web View Options"),
