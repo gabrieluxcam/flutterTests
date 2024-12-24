@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'webview_page.dart'; // Import the WebViewPage
 import 'blank_page.dart'; // Import the BlankPage
+import 'new_screen.dart'; // Import the NewScreen
+import 'dart:developer';
 
 // Firebase
 // import 'package:firebase_core/firebase_core.dart';
@@ -30,21 +32,36 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  // late FirebaseAnalytics analytics;
-  // late FirebaseAnalyticsObserver observer;
-
   @override
   void initState() {
     super.initState();
-    // Initialize Firebase Analytics
-    // analytics = FirebaseAnalytics.instance;
-    // observer = FirebaseAnalyticsObserver(analytics: analytics);
+    _initializeUxCam(); // Call the asynchronous method
+  }
 
+  Future<void> _initializeUxCam() async {
     // Initialize UXCam
     FlutterUxcam.optIntoSchematicRecordings();
     FlutterUxConfig config = FlutterUxConfig(
         userAppKey: "djazkur7hg5icjx", enableAutomaticScreenNameTagging: false);
-    FlutterUxcam.startWithConfiguration(config);
+
+    try {
+      bool isStarted = await FlutterUxcam.startWithConfiguration(config);
+      if (isStarted) {
+        String? sessionUrl = await FlutterUxcam.urlForCurrentSession();
+        if (sessionUrl != null) {
+          FlutterUxcam.logEventWithProperties(
+              "sessionURL", {"URL": sessionUrl});
+          debugPrint("Session URL: $sessionUrl");
+        } else {
+          FlutterUxcam.logEvent("Session URL could not be retrieved");
+          debugPrint("Session URL could not be retrieved");
+        }
+      } else {
+        debugPrint("UXCam initialization failed");
+      }
+    } catch (e) {
+      debugPrint("Error initializing UXCam: $e");
+    }
   }
 
   @override
@@ -55,11 +72,8 @@ class _MyAppState extends State<MyApp> {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      // navigatorObservers: <NavigatorObserver>[observer],
-      home: MyHomePage(
+      home: const MyHomePage(
         title: 'Flutter Demo Home Page',
-        // analytics: analytics,
-        // observer: observer,
       ),
     );
   }
@@ -83,39 +97,6 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
-
-  // Function to send events to Firebase Analytics
-  Future<void> _sendTestEvent1() async {
-    try {
-      // await widget.analytics.logEvent(
-      //   name: 'test_event_1',
-      //   parameters: {'value': 'test_value_1'},
-      // );
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Test Event 1 Sent!')),
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Failed to send Test Event 1')),
-      );
-    }
-  }
-
-  Future<void> _sendTestEvent2() async {
-    try {
-      // await widget.analytics.logEvent(
-      //   name: 'test_event_2',
-      //   parameters: {'value': 'test_value_2'},
-      // );
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Test Event 2 Sent!')),
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Failed to send Test Event 2')),
-      );
-    }
-  }
 
   void _incrementCounter() {
     setState(() {
@@ -143,6 +124,32 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  void _openNewScreen() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const NewScreen(),
+      ),
+    );
+  }
+
+  // Sample functions for the Test buttons
+  void _handleTest1() {
+    print('Test 1 button clicked');
+  }
+
+  void _handleTest2() {
+    print('Test 2 button clicked');
+  }
+
+  void _handleTest3() {
+    print('Test 3 button clicked');
+  }
+
+  void _handleTest4() {
+    print('Test 4 button clicked');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -150,34 +157,57 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _sendTestEvent1,
-              child: const Text('Send Test Event 1'),
-            ),
-            ElevatedButton(
-              onPressed: _sendTestEvent2,
-              child: const Text('Send Test Event 2'),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _openWebView,
-              child: const Text('Open In-App WebView'),
-            ),
-            ElevatedButton(
-              onPressed: _openBlankPage,
-              child: const Text('Open Blank Page'),
-            ),
-          ],
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              const Text('You have pushed the button this many times:'),
+              Text(
+                '$_counter',
+                style: Theme.of(context).textTheme.headlineMedium,
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: _openWebView,
+                child: const Text('Open In-App WebView'),
+              ),
+              ElevatedButton(
+                onPressed: _openBlankPage,
+                child: const Text('Open Blank Page'),
+              ),
+              ElevatedButton(
+                onPressed: _openNewScreen,
+                child: const Text('Open New Screen'),
+              ),
+              const SizedBox(height: 30),
+              const Text('Test Buttons', style: TextStyle(fontSize: 18)),
+              const SizedBox(height: 10),
+              Wrap(
+                spacing: 10,
+                runSpacing: 10,
+                alignment: WrapAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: _handleTest1,
+                    child: const Text('Test 1'),
+                  ),
+                  ElevatedButton(
+                    onPressed: _handleTest2,
+                    child: const Text('Test 2'),
+                  ),
+                  ElevatedButton(
+                    onPressed: _handleTest3,
+                    child: const Text('Test 3'),
+                  ),
+                  ElevatedButton(
+                    onPressed: _handleTest4,
+                    child: const Text('Test 4'),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
